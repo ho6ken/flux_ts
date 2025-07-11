@@ -4,7 +4,7 @@ import { fluxDispatcher } from "./flux_dispatcher";
 /**
  * 監聽store的回調
  */
-type StoreHandler = (action: FluxAction) => void;
+type StoreHandler = (action: FluxAction) => Promise<void>;
 
 /**
  * flux store
@@ -108,7 +108,7 @@ export abstract class FluxStore {
         let once: any[] = [];
 
         this._listeners.forEach((data, handler) => {
-            jobs.push(handler.apply(data.target, action));
+            jobs.push(handler.call(data.target, action));
 
             if (data.once) {
                 once.push(handler);
