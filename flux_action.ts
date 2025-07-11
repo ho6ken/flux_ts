@@ -5,8 +5,9 @@
 export interface FluxAction {
     /**
      * 種類
+     * @summary any是方便使用enum
      */
-    type: string;
+    type: string | any;
 
     /**
      * 數據

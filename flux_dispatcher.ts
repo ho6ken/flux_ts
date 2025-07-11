@@ -33,9 +33,9 @@ export class FluxDispatcher {
     }
 
     /**
-     * 廣播action給所有callback
+     * 廣播action給所有store
      */
-    public broadcast(action: FluxAction): void {
+    public emit(action: FluxAction): void {
         this._callbacks.forEach(item => item(action));
     }
 }

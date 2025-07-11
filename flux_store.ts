@@ -2,6 +2,11 @@ import { FluxAction } from "./flux_action";
 import { fluxDispatcher } from "./flux_dispatcher";
 
 /**
+ * 監聽store的回調
+ */
+type StoreHandler = (action: FluxAction) => void;
+
+/**
  * flux store
  * @summary 存放業務資料和業務邏輯, 並且只提供getter讓人取得資料
  * @summary 向dispatcher註冊callback
@@ -17,7 +22,7 @@ export abstract class FluxStore {
     /**
      * 監聽變化的view
      */
-    private declare _listeners: Map<Function, { target: Object, once: boolean }>;
+    private declare _listeners: Map<StoreHandler, { target: Object, once: boolean }>;
 
     /**
      * 關閉flux store系統
@@ -50,12 +55,12 @@ export abstract class FluxStore {
     protected abstract subscribe(action: FluxAction): void;
 
     /**
-     * 監聽變化
+     * 監聽store變化
      * @param handler 處理回調
      * @param target 觸發對象
      * @param once 是否只觸發單次
      */
-    public on(handler: Function, target: Object, once: boolean = false): void {
+    public on(handler: StoreHandler, target: Object, once: boolean = false): void {
         if (!handler || this._listeners.has(handler)) {
             return;
         }
@@ -64,10 +69,10 @@ export abstract class FluxStore {
     }
 
     /**
-     * 取消監聽
+     * 取消監聽store
      * @param handler 處理回調
      */
-    public off(handler: Function): void {
+    public off(handler: StoreHandler): void {
         if (!this._listeners.has(handler)) {
             return;
         }
@@ -76,7 +81,7 @@ export abstract class FluxStore {
     }
 
     /**
-     * 清除該對象的所有監聽
+     * 清除該對象所有的store監聽
      */
     public offBy(target: Object): void {
         if (!target) {
@@ -95,7 +100,7 @@ export abstract class FluxStore {
     }
 
     /**
-     * 派發事件
+     * 給監聽store的對象派發事件
      * @summary 可等待view完成後再繼續後續行為
      */
     protected async emit(...params: any[]): Promise<void> {
