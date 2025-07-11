@@ -103,12 +103,12 @@ export abstract class FluxStore {
      * 給監聽store的對象派發事件
      * @summary 可等待view完成後再繼續後續行為
      */
-    protected async emit(...params: any[]): Promise<void> {
+    protected async emit(action: FluxAction): Promise<void> {
         let jobs: any[] = [];
         let once: any[] = [];
 
         this._listeners.forEach((data, handler) => {
-            jobs.push(handler.apply(data.target, params));
+            jobs.push(handler.apply(data.target, action));
 
             if (data.once) {
                 once.push(handler);
