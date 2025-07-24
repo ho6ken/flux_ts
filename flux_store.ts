@@ -83,7 +83,7 @@ export abstract class FluxStore {
     /**
      * 清除該對象所有的store監聽
      */
-    public offBy(target: Object): void {
+    public offAll(target: Object): void {
         if (!target) {
             return;
         }
