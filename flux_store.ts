@@ -81,25 +81,6 @@ export abstract class FluxStore {
     }
 
     /**
-     * 清除該對象所有的store監聽
-     */
-    public offBy(target: Object): void {
-        if (!target) {
-            return;
-        }
-
-        let jobs: any[] = [];
-
-        this._listeners.forEach((data, handler) => {
-            if (data.target == target) {
-                jobs.push(handler);
-            }
-        });
-
-        jobs.forEach(item => this.off(item), this);
-    }
-
-    /**
      * 給監聽store的對象派發事件
      */
     protected emit(action: FluxAction): void {
