@@ -4,7 +4,7 @@ import { fluxDispatcher } from "./flux_dispatcher";
 /**
  * 監聽store的回調
  */
-type StoreHandler = (action: FluxAction) => Promise<void>;
+type StoreHandler = (action: FluxAction) => void;
 
 /**
  * flux store
@@ -101,14 +101,12 @@ export abstract class FluxStore {
 
     /**
      * 給監聽store的對象派發事件
-     * @summary 可等待view完成後再繼續後續行為
      */
-    protected async emit(action: FluxAction): Promise<void> {
-        let jobs: any[] = [];
+    protected emit(action: FluxAction): void {
         let once: any[] = [];
 
         this._listeners.forEach((data, handler) => {
-            jobs.push(handler.call(data.target, action));
+            handler.call(data.target, action);
 
             if (data.once) {
                 once.push(handler);
@@ -116,7 +114,5 @@ export abstract class FluxStore {
         });
 
         once.forEach(item => this.off(item), this);
-
-        await Promise.all(jobs);
     }
 }
